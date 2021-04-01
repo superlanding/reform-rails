@@ -24,13 +24,13 @@ module Reform
         require "reform/form/multi_parameter_attributes"
 
         require "reform/active_record" if defined?(ActiveRecord)
-        require "reform/mongoid" if defined?(Mongoid)
+        # require "reform/mongoid" if defined?(Mongoid)
 
         Reform::Form.class_eval do
           include Reform::Form::ActiveModel
           include Reform::Form::ActiveModel::FormBuilderMethods
           include Reform::Form::ActiveRecord if defined?(ActiveRecord)
-          include Reform::Form::Mongoid if defined?(Mongoid)
+          # include Reform::Form::Mongoid if defined?(Mongoid)
           include Reform::Form::ActiveModel::Validations
         end
       end

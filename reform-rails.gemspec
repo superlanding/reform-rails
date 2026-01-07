@@ -22,4 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "reform", ">= 2.3.1", "< 3.0.0"
   spec.add_dependency "activemodel", ">= 5.0"
+  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "minitest-line"
+  spec.add_development_dependency "debug"
 end

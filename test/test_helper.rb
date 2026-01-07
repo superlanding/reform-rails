@@ -1,7 +1,8 @@
 ENV["RAILS_ENV"] = "test"
 
+require 'debug'
 require 'minitest/autorun'
-
+require 'logger'
 # Load the rails application
 require "active_model/railtie"
 
@@ -11,10 +12,10 @@ module Dummy
   class Application < Rails::Application
     config.eager_load = false
     config.active_support.deprecation = :stderr
-    
+
     if config.respond_to?(:active_model)
       config.active_model.i18n_customize_full_message = true
-    end      
+    end
   end
 end
 
@@ -40,15 +41,15 @@ load "#{File.dirname(__FILE__)}/support/schema.rb"
 
 Minitest::Spec.class_eval do
   def self.rails_greater_6_0?
-    (::ActiveModel::VERSION::MAJOR == 6 and ::ActiveModel::VERSION::MINOR >= 1) || (::ActiveModel::VERSION::MAJOR >= 7)
+    Gem::Version.new(ActiveModel::VERSION::STRING) >= Gem::Version.new('6.1.0')
   end
 
   def self.rails5?
-    ::ActiveModel::VERSION::MAJOR.in? [5,6]
+    ::ActiveModel::VERSION::MAJOR.in? [5]
   end
 
   def self.rails_greater_4_1?
-    (::ActiveModel::VERSION::MAJOR == 4 and ::ActiveModel::VERSION::MINOR == 2) || (::ActiveModel::VERSION::MAJOR >= 5)
+    Gem::Version.new(ActiveModel::VERSION::STRING) >= Gem::Version.new('4.2.0')
   end
 end
 

@@ -1,5 +1,5 @@
 module Reform
   module Rails
-    VERSION = "0.2.6"
+    VERSION = "0.3.1"
   end
 end

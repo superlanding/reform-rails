@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 
 require 'minitest/autorun'
+require 'logger' # Required for Ruby 3.0+ compatibility with Rails 6.1
 
 # Load the rails application
 require "active_model/railtie"

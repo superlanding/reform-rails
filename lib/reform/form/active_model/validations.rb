@@ -178,6 +178,7 @@ module Reform
           private
 
           def full_messages_for_nested_fields(form_fields)
+            # form_fields.map { |field| full_messages_for_twin(field[1]) }
             form_fields
               .to_a
               .reject { |field| field[0] == "parent" }

@@ -1,6 +1,6 @@
 require "test_helper"
 
-class ActiveModelValidationTest < MiniTest::Spec
+class ActiveModelValidationTest < Minitest::Spec
   Session = Struct.new(:username, :email, :password, :confirm_password)
   Album = Struct.new(:name, :songs, :artist)
   Artist = Struct.new(:name)
@@ -326,6 +326,9 @@ class ActiveModelValidationTest < MiniTest::Spec
       _(form.errors.details).must_equal(
         policy: [{error: "error_text"}, {error: "another error"}]
       )
+
+      form.errors.add(:email, :less_than_or_equal_to, count: 2)
+      _(form.errors.messages[:email]).must_equal(["must be less than or equal to 2"])
     end
   end
 
@@ -374,4 +377,27 @@ class ActiveModelValidationTest < MiniTest::Spec
    it { _(ValidateEachForm2.new(Album.new).validate(songs: "orange")).must_equal false }
    it { _(ValidateEachForm2.new(Album.new).validate(songs: "red")).must_equal true }
  end
+end
+
+# Regression
+# Addresses a bug: https://github.com/trailblazer/reform-rails/issues/103
+class ActiveModelValidationWithIfTest < Minitest::Spec
+  Session = Struct.new(:id)
+  # Album = Struct.new(:name, :songs, :artist)
+  # Artist = Struct.new(:name)
+
+  class SessionForm < Reform::Form
+    include Reform::Form::ActiveModel::Validations
+
+    property :id, virtual: true
+
+    # validates :id, presence: true, if: -> { raise id.inspect }
+  end
+
+  let (:form) { SessionForm.new(Session.new(2)) }
+
+  # valid.
+  it do
+    assert_equal form.id, nil
+  end
 end

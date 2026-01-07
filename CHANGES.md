@@ -1,3 +1,16 @@
+# 0.2.6
+
+* Allow to override `#persisted?` and friends with modules.
+
+# 0.2.5
+
+* Fix: Delegating from form object causes ArgumentError with 0.2.4 (https://github.com/trailblazer/reform-rails/issues/99)
+
+# 0.2.4
+
+* Fix keyword argument warning in `method_missing` (https://github.com/trailblazer/reform-rails/pull/97)
+* Internal: Replace Uber::Delegates with Forwardable in Form::ActiveModel
+
 # 0.2.3
 
 * Fix deprecation warning related to `respond_to?`

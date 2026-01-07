@@ -4,8 +4,11 @@ module Reform::Form::ActiveModel
       extend ClassMethods
       register_feature ActiveModel
 
-      extend Forwardable
-      def_delegators :model, :persisted?, :to_key, :to_param, :id
+      delegations = Module.new do
+        delegate :persisted?, :to_key, :to_param, :id, to: :model
+      end
+
+      include delegations # now, those methods (e.g. {#persisted?}) can be overridden by another module.
 
       def to_model # this is called somewhere in FormBuilder and ActionController.
         self

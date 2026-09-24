@@ -40,7 +40,7 @@ class UniquenessValidatorOnCreateCaseInsensitiveTest < Minitest::Spec
 
     form = SongForm.new(Song.new)
     _(form.validate("title" => "how many tears")).must_equal false
-    _(form.errors.to_s).must_equal "{:title=>[\"has already been taken\"]}"
+    _(form.errors.messages).must_equal({title: ["has already been taken"]})
   end
 
   it do
@@ -86,7 +86,7 @@ class UniquenessValidatorOnUpdateWithDuplicateTest < Minitest::Spec
 
     form = SongForm.new(song1)
     _(form.validate("title" => "How Many Tears 2")).must_equal false
-    _(form.errors.to_s).must_equal "{:title=>[\"has already been taken\"]}"
+    _(form.errors.messages).must_equal({title: ["has already been taken"]})
   end
 end
 
@@ -106,7 +106,7 @@ class UniquenessValidatorWithFromPropertyTest < Minitest::Spec
 
     form = SongForm.new(Song.new)
     _(form.validate("name" => "How Many Tears")).must_equal false
-    _(form.errors.to_s).must_equal "{:name=>[\"has already been taken\"]}"
+    _(form.errors.messages).must_equal({name: ["has already been taken"]})
   end
 end
 
@@ -179,7 +179,7 @@ class UniqueValidatorWithScopeAndCaseInsensitiveTest < Minitest::Spec
 
     form = SongForm.new(Song.new)
     _(form.validate(album_id: album.id, title: 'how many tears')).must_equal false
-    _(form.errors.to_s).must_equal "{:title=>[\"has already been taken\"]}"
+    _(form.errors.messages).must_equal({title: ["has already been taken"]})
 
     album = Album.new
     album.save

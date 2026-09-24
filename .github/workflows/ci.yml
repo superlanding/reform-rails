@@ -93,3 +93,16 @@ jobs:
         ruby-version: "3.3"
     - run: BUNDLE_GEMFILE=Gemfile-rails8 bundle install
     - run: BUNDLE_GEMFILE=Gemfile-rails8 bundle exec rake
+
+  test-rails8-ruby34:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: supercharge/mongodb-github-action@1.12.0
+      with:
+        mongodb-version: "4.4"
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: "3.4"
+    - run: BUNDLE_GEMFILE=Gemfile-rails8 bundle install
+    - run: BUNDLE_GEMFILE=Gemfile-rails8 bundle exec rake

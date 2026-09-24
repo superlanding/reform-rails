@@ -37,13 +37,13 @@ class ActiveModelValidationTest < Minitest::Spec
   # valid.
   it do
     _(form.validate({username: "Helloween", email: "yep", password: "9", confirm_password:"dd"})).must_equal true
-    _(form.errors.messages.inspect).must_equal "{}"
+    _(form.errors.messages).must_equal({})
   end
 
   # invalid.
   it do
     _(form.validate({})).must_equal false
-    _(form.errors.messages.inspect).must_equal "{:username=>[\"can't be blank\"], :email=>[\"can't be blank\"]}"
+    _(form.errors.messages).must_equal({username: ["can't be blank"], email: ["can't be blank"]})
     _(form.errors[:username]).must_equal ["can't be blank"]
     _(form.errors['username']).must_equal ["can't be blank"]
   end
@@ -53,17 +53,17 @@ class ActiveModelValidationTest < Minitest::Spec
   let (:character) { self.class.rails_greater_4_1? ? :character : :characters}
   it do
     _(form.validate(username: "Helloween", email: "yo")).must_equal false
-    _(form.errors.messages.inspect).must_equal "{:email=>[\"is the wrong length (should be 3 characters)\"], :confirm_password=>[\"is the wrong length (should be 2 characters)\"], :password=>[\"can't be blank\", \"is the wrong length (should be 1 #{character})\"]}"
+    _(form.errors.messages).must_equal({email: ["is the wrong length (should be 3 characters)"], confirm_password: ["is the wrong length (should be 2 characters)"], password: ["can't be blank", "is the wrong length (should be 1 #{character})"]})
   end
   # 3rd group fails.
   it do
     _(form.validate(username: "Helloween", email: "yo!")).must_equal false
-    _(form.errors.messages.inspect).must_equal"{:confirm_password=>[\"is the wrong length (should be 2 characters)\"], :password=>[\"can't be blank\", \"is the wrong length (should be 1 #{character})\"]}"
+    _(form.errors.messages).must_equal({confirm_password: ["is the wrong length (should be 2 characters)"], password: ["can't be blank", "is the wrong length (should be 1 #{character})"]})
   end
   # 4th group with after: fails.
   it do
     _(form.validate(username: "Helloween", email: "yo!", password: "1", confirm_password: "9")).must_equal false
-    _(form.errors.messages.inspect).must_equal "{:confirm_password=>[\"is the wrong length (should be 2 characters)\"]}"
+    _(form.errors.messages).must_equal({confirm_password: ["is the wrong length (should be 2 characters)"]})
   end
 
 
@@ -92,20 +92,20 @@ class ActiveModelValidationTest < Minitest::Spec
     # valid.
     it do
       _(form.validate({username: "Helloween", email: "yep", password: "9", confirm_password: 9})).must_equal true
-      _(form.errors.messages.inspect).must_equal "{}"
+      _(form.errors.messages).must_equal({})
     end
 
     # invalid.
     it do
       _(form.validate({password: 9})).must_equal false
-      _(form.errors.messages.inspect).must_equal "{:username=>[\"can't be blank\"], :email=>[\"can't be blank\"]}"
+      _(form.errors.messages).must_equal({username: ["can't be blank"], email: ["can't be blank"]})
     end
 
     # partially invalid.
     # 2nd group fails.
     it do
       _(form.validate(password: 9)).must_equal false
-      _(form.errors.messages.inspect).must_equal "{:username=>[\"can't be blank\"], :email=>[\"can't be blank\"]}"
+      _(form.errors.messages).must_equal({username: ["can't be blank"], email: ["can't be blank"]})
     end
   end
 
@@ -136,7 +136,7 @@ class ActiveModelValidationTest < Minitest::Spec
   #   # invalid.
   #   it do
   #     _(form.validate({})).must_equal false
-  #     _(form.errors.messages.inspect).must_equal "{:username=>[\"username can't be blank\"]}"
+  #     _(form.errors.messages).must_equal({username: ["username can't be blank"]})
   #   end
   # end
 
@@ -167,10 +167,10 @@ class ActiveModelValidationTest < Minitest::Spec
     # invalid.
     it do
       _(form.validate({})).must_equal false
-      _(form.errors.messages.inspect).must_equal "{:email=>[\"can't be blank\"], :username=>[\"can't be blank\"]}"
+      _(form.errors.messages).must_equal({email: ["can't be blank"], username: ["can't be blank"]})
 
       if self.class.rails5?
-        _(form.errors.details.inspect).must_equal "{:email=>[{:error=>:blank}], :username=>[{:error=>:blank}]}"
+        _(form.errors.details).must_equal({email: [{error: :blank}], username: [{error: :blank}]})
       end
     end
   end
@@ -209,9 +209,9 @@ class ActiveModelValidationTest < Minitest::Spec
     # invalid.
     it do
       _(form.validate({email: 9})).must_equal false
-      _(form.errors.messages.inspect).must_equal "{:username=>[\"can't be blank\"]}"
+      _(form.errors.messages).must_equal({username: ["can't be blank"]})
       if self.class.rails5?
-        _(form.errors.details.inspect).must_equal "{:username=>[{:error=>:blank}]}"
+        _(form.errors.details).must_equal({username: [{error: :blank}]})
       end
 
     end
@@ -258,7 +258,7 @@ class ActiveModelValidationTest < Minitest::Spec
       _(form.validate({username: "yo", email: nil})).must_equal false
       _(form.errors.messages).must_equal({:email=>["can't be blank", "fill it out!"], :username=>["not ok", "must be yo"]})
       if self.class.rails5?
-        _(form.errors.details.inspect).must_equal "{:username=>[{:error=>\"not ok\"}, {:error=>\"must be yo\"}], :email=>[{:error=>:blank}, {:error=>\"fill it out!\"}]}"
+        _(form.errors.details).must_equal({username: [{error: "not ok"}, {error: "must be yo"}], email: [{error: :blank}, {error: "fill it out!"}]})
       end
     end
 
@@ -271,7 +271,7 @@ class ActiveModelValidationTest < Minitest::Spec
         _(form.errors.messages).must_equal({:username=>[], :email=>[]})
       end
       if self.class.rails5?
-        _(form.errors.details.inspect).must_equal "{}"
+        _(form.errors.details).must_equal({})
       end
       _(form.errors.empty?).must_equal true
     end
